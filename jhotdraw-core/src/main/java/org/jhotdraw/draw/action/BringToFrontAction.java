@@ -7,6 +7,7 @@
  */
 package org.jhotdraw.draw.action;
 
+import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.draw.figure.Figure;
 import java.util.*;
 import javax.swing.undo.*;
@@ -36,6 +37,7 @@ public class BringToFrontAction extends AbstractSelectedAction {
     }
 
     @Override
+    @FeatureEntryPoint("BringToFrontAction")
     public void actionPerformed(java.awt.event.ActionEvent e) {
         final DrawingView view = getView();
         final LinkedList<Figure> figures = new LinkedList<>(view.getSelectedFigures());
