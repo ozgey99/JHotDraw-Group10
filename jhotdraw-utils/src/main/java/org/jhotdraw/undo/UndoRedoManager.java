@@ -12,7 +12,6 @@ import java.beans.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.undo.*;
-
 import org.jhotdraw.util.*;
 
 /**
