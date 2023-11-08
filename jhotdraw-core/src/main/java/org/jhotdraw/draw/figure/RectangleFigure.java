@@ -32,7 +32,6 @@ public class RectangleFigure extends AbstractAttributedFigure {
         this(0, 0, 0, 0);
     }
 
-    @FeatureEntryPoint(value = "Rectangle")
     public RectangleFigure(double x, double y, double width, double height) {
         rectangle = new Rectangle2D.Double(x, y, width, height);
     }

@@ -135,7 +135,6 @@ public class UndoRedoManager extends UndoManager { //javax.swing.undo.UndoManage
     /**
      * Creates new UndoRedoManager
      */
-    @FeatureEntryPoint(value = "UndoRedoManager")
     public UndoRedoManager() {
         getLabels();
         undoAction = new UndoAction();

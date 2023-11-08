@@ -67,7 +67,6 @@ public class ActionsToolBar extends AbstractToolBar {
         }
     }
 
-    @FeatureEntryPoint(value = "UndoRedo")
     public void setUndoManager(UndoRedoManager newValue) {
         if (this.editor != null && newValue != null) {
             this.removePropertyChangeListener(getEventHandler());
