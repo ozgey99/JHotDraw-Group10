@@ -72,7 +72,6 @@ public class SVGDrawingPanel extends JPanel implements Disposable {
     public UndoRedoManager getUndoRedoManager() {
         return undoManager;
     }
-
     public void setUndoRedoManager(UndoRedoManager undo) {
         if (undoManager != null && getView().getDrawing() != null) {
             getView().getDrawing().removeUndoableEditListener(undoManager);

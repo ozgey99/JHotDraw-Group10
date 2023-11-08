@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.*;
+import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.action.edit.ClearSelectionAction;
 import org.jhotdraw.action.edit.CopyAction;
 import org.jhotdraw.action.edit.CutAction;
@@ -66,6 +67,7 @@ public class ActionsToolBar extends AbstractToolBar {
         }
     }
 
+    @FeatureEntryPoint(value = "UndoRedo")
     public void setUndoManager(UndoRedoManager newValue) {
         if (this.editor != null && newValue != null) {
             this.removePropertyChangeListener(getEventHandler());
