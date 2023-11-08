@@ -13,7 +13,6 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.undo.*;
 
-import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.util.*;
 
 /**
