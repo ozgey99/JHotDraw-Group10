@@ -16,6 +16,7 @@ import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.event.ToolAdapter;
 import org.jhotdraw.draw.event.ToolEvent;
 import org.jhotdraw.draw.handle.Handle;
+import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 
 /**
  * Tool to select and manipulate figures.
@@ -118,6 +119,7 @@ public class SelectionTool extends AbstractTool {
     /**
      * Creates a new instance.
      */
+    @FeatureEntryPoint(value="SelectionTool")
     public SelectionTool() {
         tracker = getSelectAreaTracker();
         trackerHandler = new TrackerHandler();
