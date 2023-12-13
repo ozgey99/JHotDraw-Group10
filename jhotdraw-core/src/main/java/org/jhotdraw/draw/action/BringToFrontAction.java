@@ -71,7 +71,7 @@ public class BringToFrontAction extends AbstractArrangeAction {
     public void arrange(DrawingView view, Collection<Figure> figures) {
         Drawing drawing = view.getDrawing();
         for (Figure figure : drawing.sort(figures)) {
-            drawing.bringToFront(figure);
+            drawing.arrange(figure, ArrangeActionType.BRING_TO_FRONT);
         }
     }
 }

@@ -71,7 +71,7 @@ public class SendToBackAction extends AbstractArrangeAction {
     public void arrange(DrawingView view, Collection<Figure> figures) {
         Drawing drawing = view.getDrawing();
         for (Figure figure : figures) {
-            drawing.sendToBack(figure);
+            drawing.arrange(figure, ArrangeActionType.SEND_TO_BACK);
         }
     }
 }

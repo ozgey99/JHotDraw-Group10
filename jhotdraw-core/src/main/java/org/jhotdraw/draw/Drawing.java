@@ -14,6 +14,8 @@ import java.io.*;
 import java.util.*;
 import javax.swing.event.*;
 import javax.swing.undo.*;
+
+import org.jhotdraw.draw.action.ArrangeActionType;
 import org.jhotdraw.draw.figure.CompositeFigure;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.io.InputFormat;
@@ -296,19 +298,7 @@ public interface Drawing extends CompositeFigure, Serializable, DOMStorable {
     @Override
     Figure findFigureInside(Point2D.Double p);
 
-    /**
-     * Sends a figure to the back of the drawing.
-     *
-     * @param figure that is part of the drawing
-     */
-    void sendToBack(Figure figure);
-
-    /**
-     * Brings a figure to the front.
-     *
-     * @param figure that is part of the drawing
-     */
-    void bringToFront(Figure figure);
+    void arrange(Figure figure, ArrangeActionType actionType);
 
     /**
      * Returns a copy of the provided collection which is sorted

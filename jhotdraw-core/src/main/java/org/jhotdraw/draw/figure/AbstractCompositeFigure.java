@@ -16,6 +16,8 @@ import javax.swing.event.*;
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.draw.Drawing;
 import static org.jhotdraw.draw.AttributeKeys.*;
+
+import org.jhotdraw.draw.action.ArrangeActionType;
 import org.jhotdraw.draw.event.CompositeFigureEvent;
 import org.jhotdraw.draw.event.CompositeFigureListener;
 import org.jhotdraw.draw.event.FigureAdapter;
@@ -265,25 +267,19 @@ public abstract class AbstractCompositeFigure
     }
 
     /**
-     * Sends a figure to the back of the composite figure.
-     *
-     * @param figure that is part of this composite figure
-     */
-    public void sendToBack(Figure figure) {
-        if (basicRemove(figure) != -1) {
-            basicAdd(0, figure);
-            fireAreaInvalidated(figure.getDrawingArea());
-        }
-    }
-
-    /**
-     * Brings a figure to the front of the drawing.
+     * Arranges a figure's position.
      *
      * @param figure that is part of the drawing
+     * @param actionType either send to back or bring to front
      */
-    public void bringToFront(Figure figure) {
+    public void arrange(Figure figure, ArrangeActionType actionType) {
         if (basicRemove(figure) != -1) {
-            basicAdd(figure);
+            if (actionType.equals(ArrangeActionType.SEND_TO_BACK)) {
+                basicAdd(0, figure);
+            } else if (actionType.equals(ArrangeActionType.BRING_TO_FRONT)) {
+                basicAdd(figure);
+            }
+
             fireAreaInvalidated(figure.getDrawingArea());
         }
     }
