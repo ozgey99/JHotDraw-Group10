@@ -2,27 +2,32 @@ package org.jhotdraw.draw.acceptancetest.stage;
 
 import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
-import org.jhotdraw.draw.DefaultDrawingView;
-import org.jhotdraw.draw.QuadTreeDrawing;
+import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.figure.EllipseFigure;
 import org.jhotdraw.draw.figure.Figure;
+import org.jhotdraw.draw.figure.RectangleFigure;
+
+import java.util.ArrayList;
 
 public class GivenTwoFigures extends Stage<GivenTwoFigures> {
     @ProvidedScenarioState
     QuadTreeDrawing quadTreeDrawing;
 
     @ProvidedScenarioState
-    Figure testFigure1;
-
-    @ProvidedScenarioState
-    Figure testFigure2;
+    ArrayList<Figure> testFigures;
 
     public GivenTwoFigures two_figures() {
-        DefaultDrawingView defaultDrawingView = new DefaultDrawingView();
+        testFigures = new ArrayList<>();
         quadTreeDrawing = new QuadTreeDrawing();
 
-        defaultDrawingView.setDrawing(quadTreeDrawing);
-        defaultDrawingView.getDrawing().add(testFigure1);
-        defaultDrawingView.getDrawing().add(testFigure2);
+        Figure testFigure1 = new EllipseFigure(0, 0, 10, 10);
+        Figure testFigure2 = new RectangleFigure(5, 5, 5, 5);
+
+        testFigures.add(testFigure1);
+        testFigures.add(testFigure2);
+
+        quadTreeDrawing.add(testFigure1);
+        quadTreeDrawing.add(testFigure2);
 
         return self();
     }

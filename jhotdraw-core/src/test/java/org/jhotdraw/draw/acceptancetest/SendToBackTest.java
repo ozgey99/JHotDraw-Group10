@@ -1,6 +1,6 @@
 package org.jhotdraw.draw.acceptancetest;
 
-import com.tngtech.jgiven.junit.ScenarioTest;
+import com.tngtech.jgiven.junit5.ScenarioTest;
 import org.jhotdraw.draw.acceptancetest.stage.GivenTwoFigures;
 import org.jhotdraw.draw.acceptancetest.stage.ThenSecondFigureIsBehind;
 import org.jhotdraw.draw.acceptancetest.stage.WhenSecondFigureIsSentToBack;

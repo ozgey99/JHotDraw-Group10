@@ -1,0 +1,76 @@
+{
+  "className": "org.jhotdraw.draw.acceptancetest.BringToFrontTest",
+  "name": "Bring To Front",
+  "scenarios": [
+    {
+      "className": "org.jhotdraw.draw.acceptancetest.BringToFrontTest",
+      "testMethodName": "bringToFront",
+      "description": "Bring to front",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "two figures",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "two figures"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 93750114,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "first figure is brought to front",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "first figure is brought to front"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 561146,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "first figure is in front",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "first figure is in front"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 1643281,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "durationInNanos": 113685167
+        }
+      ],
+      "casesAsTable": false,
+      "durationInNanos": 113685167
+    }
+  ],
+  "tagMap": {}
+}
