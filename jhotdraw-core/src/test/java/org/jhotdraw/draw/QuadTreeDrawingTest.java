@@ -23,12 +23,12 @@ class QuadTreeDrawingTest {
 
         // act
         quadTreeDrawing.arrange(testFigure2, ArrangeActionType.SEND_TO_BACK);
-        List<Figure> capturedList = quadTreeDrawing.getChildren();
+        List<Figure> figures = quadTreeDrawing.getChildren();
 
         // assert
-        Assertions.assertEquals(2, capturedList.size());
-        Assertions.assertEquals(0, capturedList.indexOf(testFigure2));
-        Assertions.assertEquals(1, capturedList.indexOf(testFigure1));
+        Assertions.assertEquals(2, figures.size());
+        Assertions.assertEquals(0, figures.indexOf(testFigure2));
+        Assertions.assertEquals(1, figures.indexOf(testFigure1));
     }
 
     @Test
@@ -45,12 +45,12 @@ class QuadTreeDrawingTest {
 
         // act
         quadTreeDrawing.arrange(testFigure1, ArrangeActionType.BRING_TO_FRONT);
-        List<Figure> capturedList = quadTreeDrawing.getChildren();
+        List<Figure> figures = quadTreeDrawing.getChildren();
 
         // assert
-        Assertions.assertEquals(2, capturedList.size());
-        Assertions.assertEquals(0, capturedList.indexOf(testFigure2));
-        Assertions.assertEquals(1, capturedList.indexOf(testFigure1));
+        Assertions.assertEquals(2, figures.size());
+        Assertions.assertEquals(0, figures.indexOf(testFigure2));
+        Assertions.assertEquals(1, figures.indexOf(testFigure1));
     }
 
     static class MockQuadTreeDrawing extends QuadTreeDrawing {
