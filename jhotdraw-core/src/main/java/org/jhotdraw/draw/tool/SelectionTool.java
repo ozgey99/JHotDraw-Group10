@@ -119,7 +119,7 @@ public class SelectionTool extends AbstractTool {
     /**
      * Creates a new instance.
      */
-    @FeatureEntryPoint(value="SelectionTool")
+    @FeatureEntryPoint("SelectionTool")
     public SelectionTool() {
         tracker = getSelectAreaTracker();
         trackerHandler = new TrackerHandler();
@@ -225,6 +225,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
+    @FeatureEntryPoint("SelectionTool")
     public void mousePressed(MouseEvent evt) {
         if (getView() != null && getView().isEnabled()) {
             super.mousePressed(evt);
