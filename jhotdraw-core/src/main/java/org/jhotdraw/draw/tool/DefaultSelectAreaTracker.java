@@ -56,12 +56,12 @@ public class DefaultSelectAreaTracker extends AbstractTool implements SelectArea
     /**
      * Rubberband stroke.
      */
-    private Stroke rubberbandStroke = new BasicStroke();
+    private transient Stroke rubberbandStroke = new BasicStroke();
     /**
      * The hover handles, are the handles of the figure over which the
      * mouse pointer is currently hovering.
      */
-    private LinkedList<Handle> hoverHandles = new LinkedList<>();
+    private transient LinkedList<Handle> hoverHandles = new LinkedList<>();
     /**
      * The hover Figure is the figure, over which the mouse is currently
      * hovering.
@@ -72,8 +72,7 @@ public class DefaultSelectAreaTracker extends AbstractTool implements SelectArea
      * Creates a new instance.
      */
     @FeatureEntryPoint(value="SelectionTool")
-    public DefaultSelectAreaTracker() {
-    }
+    public DefaultSelectAreaTracker() {}
 
     @Override
     public void mousePressed(MouseEvent evt) {
@@ -83,7 +82,7 @@ public class DefaultSelectAreaTracker extends AbstractTool implements SelectArea
 
     @Override
     public void mouseReleased(MouseEvent evt) {
-        selectGroup(evt.isShiftDown());
+        selectGroup();
         clearRubberBand();
     }
 
@@ -117,19 +116,7 @@ public class DefaultSelectAreaTracker extends AbstractTool implements SelectArea
             // Only then search for other
             // figures. This search sequence is consistent with the
             // search sequence of the SelectionTool.
-            Figure figure = null;
-            Point2D.Double p = view.viewToDrawing(point);
-            for (Figure f : view.getSelectedFigures()) {
-                if (f.contains(p)) {
-                    figure = f;
-                }
-            }
-            if (figure == null) {
-                figure = view.findFigure(point);
-                while (figure != null && !figure.isSelectable()) {
-                    figure = view.getDrawing().findFigureBehind(p, figure);
-                }
-            }
+            Figure figure = SelectionHelper.searchForFigure(view, point, true);
             updateHoverHandles(view, figure);
         }
     }
@@ -152,14 +139,14 @@ public class DefaultSelectAreaTracker extends AbstractTool implements SelectArea
         g.setStroke(rubberbandStroke);
         g.setColor(rubberbandColor);
         g.drawRect(rubberband.x, rubberband.y, rubberband.width - 1, rubberband.height - 1);
-        if (hoverHandles.size() > 0 && !getView().isFigureSelected(hoverFigure)) {
+        if (!hoverHandles.isEmpty() && !getView().isFigureSelected(hoverFigure)) {
             for (Handle h : hoverHandles) {
                 h.draw(g);
             }
         }
     }
 
-    private void selectGroup(boolean toggle) {
+    private void selectGroup() {
         Collection<Figure> figures = getView().findFiguresWithin(rubberband);
         for (Figure f : figures) {
             if (f.isSelectable()) {

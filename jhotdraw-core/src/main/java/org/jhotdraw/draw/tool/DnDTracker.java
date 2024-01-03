@@ -34,7 +34,7 @@ import org.jhotdraw.draw.*;
  * @author Werner Randelshofer
  * @version $Id$
  */
-public class DnDTracker extends AbstractTool implements DragTracker {
+public class DnDTracker extends DefaultDragTracker implements DragTracker {
 
     private static final long serialVersionUID = 1L;
     protected Figure anchorFigure;
@@ -68,44 +68,11 @@ public class DnDTracker extends AbstractTool implements DragTracker {
     private boolean isDragging;
 
     public DnDTracker() {
+        super();
     }
 
     public DnDTracker(Figure figure) {
-        anchorFigure = figure;
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent evt) {
-        updateCursor(editor.findView((Container) evt.getSource()), evt.getPoint());
-    }
-
-    @Override
-    public void mousePressed(MouseEvent evt) {
-        super.mousePressed(evt);
-        DrawingView view = getView();
-        if (evt.isShiftDown()) {
-            view.setHandleDetailLevel(0);
-            view.toggleSelection(anchorFigure);
-            if (!view.isFigureSelected(anchorFigure)) {
-                anchorFigure = null;
-            }
-        } else if (!view.isFigureSelected(anchorFigure)) {
-            view.setHandleDetailLevel(0);
-            view.clearSelection();
-            view.addToSelection(anchorFigure);
-        }
-        if (!view.getSelectedFigures().isEmpty()) {
-            dragRect = null;
-            for (Figure f : view.getSelectedFigures()) {
-                if (dragRect == null) {
-                    dragRect = f.getBounds();
-                } else {
-                    dragRect.add(f.getBounds());
-                }
-            }
-            anchorPoint = previousPoint = view.viewToDrawing(anchor);
-            anchorOrigin = previousOrigin = new Point2D.Double(dragRect.x, dragRect.y);
-        }
+        super(figure);
     }
 
     @Override
@@ -126,10 +93,5 @@ public class DnDTracker extends AbstractTool implements DragTracker {
     public void mouseReleased(MouseEvent evt) {
         updateCursor(editor.findView((Container) evt.getSource()), evt.getPoint());
         fireToolDone();
-    }
-
-    @Override
-    public void setDraggedFigure(Figure f) {
-        anchorFigure = f;
     }
 }

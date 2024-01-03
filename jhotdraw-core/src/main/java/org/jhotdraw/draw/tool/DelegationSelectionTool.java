@@ -201,16 +201,16 @@ public class DelegationSelectionTool extends SelectionTool {
         if (figure != null) {
             LinkedList<Action> figureActions = new LinkedList<>(
                     figure.getActions(viewToDrawing(p)));
-            if (popupActions.size() != 0 && figureActions.size() != 0) {
+            if (!popupActions.isEmpty() && !figureActions.isEmpty()) {
                 popupActions.add(null);
             }
             popupActions.addAll(figureActions);
-            if (popupActions.size() != 0 && selectionActions.size() != 0) {
+            if (!popupActions.isEmpty() && !selectionActions.isEmpty()) {
                 popupActions.add(null);
             }
             popupActions.addAll(selectionActions);
         }
-        if (popupActions.size() != 0 && drawingActions.size() != 0) {
+        if (!popupActions.isEmpty() && !drawingActions.isEmpty()) {
             popupActions.add(null);
         }
         popupActions.addAll(drawingActions);
@@ -276,25 +276,8 @@ public class DelegationSelectionTool extends SelectionTool {
             }
             handle.trackDoubleClick(pos, evt.getModifiersEx());
         } else {
+            Figure figure = SelectionHelper.searchForFigure(getView(), pos, isSelectBehindEnabled());
             Point2D.Double p = viewToDrawing(pos);
-            // Note: The search sequence used here, must be
-            // consistent with the search sequence used by the
-            // HandleTracker, the SelectAreaTracker and SelectionTool.
-            // If possible, continue to work with the current selection
-            Figure figure = null;
-            if (isSelectBehindEnabled()) {
-                for (Figure f : v.getSelectedFigures()) {
-                    if (f.contains(p)) {
-                        figure = f;
-                        break;
-                    }
-                }
-            }
-            // If the point is not contained in the current selection,
-            // search for a figure in the drawing.
-            if (figure == null) {
-                figure = v.findFigure(pos);
-            }
             Figure outerFigure = figure;
             if (figure != null && figure.isSelectable()) {
                 if (DEBUG) {

@@ -57,19 +57,19 @@ public class SelectionTool extends AbstractTool {
     /**
      * The tracker encapsulates the current state of the SelectionTool.
      */
-    private Tool tracker;
+    private transient Tool tracker;
     /**
      * The tracker encapsulates the current state of the SelectionTool.
      */
-    private HandleTracker handleTracker;
+    private transient HandleTracker handleTracker;
     /**
      * The tracker encapsulates the current state of the SelectionTool.
      */
-    private SelectAreaTracker selectAreaTracker;
+    private transient SelectAreaTracker selectAreaTracker;
     /**
      * The tracker encapsulates the current state of the SelectionTool.
      */
-    private DragTracker dragTracker;
+    private transient DragTracker dragTracker;
 
     private class TrackerHandler extends ToolAdapter {
 
@@ -105,7 +105,7 @@ public class SelectionTool extends AbstractTool {
             fireBoundsInvalidated(e.getInvalidatedArea());
         }
     }
-    private TrackerHandler trackerHandler;
+    private transient TrackerHandler trackerHandler;
     /**
      * Constant for the name of the selectBehindEnabled property.
      */
@@ -224,73 +224,58 @@ public class SelectionTool extends AbstractTool {
         tracker.draw(g);
     }
 
+    public Tool getHandleTracker(){
+        return tracker;
+    }
+
     @Override
     @FeatureEntryPoint("SelectionTool")
     public void mousePressed(MouseEvent evt) {
         if (getView() != null && getView().isEnabled()) {
             super.mousePressed(evt);
-            DrawingView view = getView();
-            Handle handle = view.findHandle(anchor);
-            Tool newTracker = null;
-            if (handle != null) {
-                newTracker = getHandleTracker(handle);
-            } else {
-                Figure figure;
-                Drawing drawing = view.getDrawing();
-                Point2D.Double p = view.viewToDrawing(anchor);
-                if (isSelectBehindEnabled()
-                        && (evt.getModifiersEx()
-                        & (InputEvent.ALT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK)) != 0) {
-                    // Select a figure behind the current selection
-                    figure = view.findFigure(anchor);
-                    while (figure != null && !figure.isSelectable()) {
-                        figure = drawing.findFigureBehind(p, figure);
-                    }
-                    HashSet<Figure> ignoredFigures = new HashSet<>(view.getSelectedFigures());
-                    ignoredFigures.add(figure);
-                    Figure figureBehind = view.getDrawing().findFigureBehind(
-                            view.viewToDrawing(anchor), ignoredFigures);
-                    if (figureBehind != null) {
-                        figure = figureBehind;
-                    }
-                } else {
-                    // Note: The search sequence used here, must be
-                    // consistent with the search sequence used by the
-                    // DefaultHandleTracker, the DefaultSelectAreaTracker and DelegationSelectionTool.
-                    // If possible, continue to work with the current selection
-                    figure = null;
-                    if (isSelectBehindEnabled()) {
-                        for (Figure f : view.getSelectedFigures()) {
-                            if (f.contains(p)) {
-                                figure = f;
-                                break;
-                            }
-                        }
-                    }
-                    // If the point is not contained in the current selection,
-                    // search for a figure in the drawing.
-                    if (figure == null) {
-                        figure = view.findFigure(anchor);
-                        while (figure != null && !figure.isSelectable()) {
-                            figure = drawing.findFigureBehind(p, figure);
-                        }
-                    }
-                }
-                if (figure != null && figure.isSelectable()) {
-                    newTracker = getDragTracker(figure);
-                } else {
-                    if (!evt.isShiftDown()) {
-                        view.clearSelection();
-                        view.setHandleDetailLevel(0);
-                    }
-                    newTracker = getSelectAreaTracker();
-                }
-            }
-            if (newTracker != null) {
-                setTracker(newTracker);
-            }
+            Tool newTracker = getNewTracker(evt, getView());
+            if (newTracker != null) setTracker(newTracker);
             tracker.mousePressed(evt);
         }
+    }
+
+    public Tool getNewTracker(MouseEvent evt, DrawingView view){
+        Handle handle = view.findHandle(anchor);
+        if (handle != null) return getHandleTracker(handle);
+        Figure figure = getSelectedFigure(evt, view);
+        if (figure != null && figure.isSelectable()) return getDragTracker(figure);
+        if (!evt.isShiftDown()) {
+            view.clearSelection();
+            view.setHandleDetailLevel(0);
+        }
+        return getSelectAreaTracker();
+    }
+
+    private Figure getSelectedFigure(MouseEvent evt, DrawingView view){
+        if (isSelectBehindEnabled()
+                && (evt.getModifiersEx()
+                & (InputEvent.ALT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK)) != 0) {
+            // Select a figure behind the current selection
+            return getFigureBehindSelection(view);
+        }
+        return SelectionHelper.searchForFigure(view, anchor, isSelectBehindEnabled());
+    }
+
+    private Figure getFigureBehindSelection(DrawingView view){
+        Figure figure = view.findFigure(anchor);
+        Drawing drawing = view.getDrawing();
+        Point2D.Double p = view.viewToDrawing(anchor);
+        while (figure != null && !figure.isSelectable()) {
+            figure = drawing.findFigureBehind(p, figure);
+        }
+        HashSet<Figure> ignoredFigures = new HashSet<>(view.getSelectedFigures());
+        ignoredFigures.add(figure);
+        Figure figureBehind = view.getDrawing().findFigureBehind(
+                view.viewToDrawing(anchor), ignoredFigures);
+        if (figureBehind != null) {
+            figure = figureBehind;
+        }
+        return figure;
     }
 
     protected void setTracker(Tool newTracker) {

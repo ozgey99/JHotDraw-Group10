@@ -64,19 +64,19 @@ public class DefaultHandleTracker extends AbstractTool implements HandleTracker 
             // empty
         }
     }
-    private EventHandler eventHandler = new EventHandler();
+    private transient EventHandler eventHandler = new EventHandler();
     /**
      * Last dragged mouse location. This variable is only non-null when
      * the mouse is being pressed or dragged.
      */
     private Point dragLocation;
-    private Handle masterHandle;
-    private HandleMulticaster multicaster;
+    private transient Handle masterHandle;
+    private transient HandleMulticaster multicaster;
     /**
      * The hover handles, are the handles of the figure over which the
      * mouse pointer is currently hovering.
      */
-    private LinkedList<Handle> hoverHandles = new LinkedList<>();
+    private transient LinkedList<Handle> hoverHandles = new LinkedList<>();
     /**
      * The hover Figure is the figure, over which the mouse is currently
      * hovering.
@@ -101,7 +101,7 @@ public class DefaultHandleTracker extends AbstractTool implements HandleTracker 
 
     @Override
     public void draw(Graphics2D g) {
-        if (hoverHandles.size() > 0 && !getView().isFigureSelected(hoverFigure)) {
+        if (!hoverHandles.isEmpty() && !getView().isFigureSelected(hoverFigure)) {
             for (Handle h : hoverHandles) {
                 h.draw(g);
             }
@@ -110,10 +110,10 @@ public class DefaultHandleTracker extends AbstractTool implements HandleTracker 
 
     /* FIXME - The handle should draw itself in selected mode
     public void draw(Graphics2D g) {
-    g.setColor(Color.RED);
-    g.draw(
-    masterHandle.getBounds()
-    );
+        g.setColor(Color.RED);
+        g.draw(
+        masterHandle.getBounds()
+        );
     }*/
     @Override
     public void activate(DrawingEditor editor) {
@@ -199,7 +199,6 @@ public class DefaultHandleTracker extends AbstractTool implements HandleTracker 
     @Override
     public void mouseMoved(MouseEvent evt) {
         Point point = evt.getPoint();
-        updateCursor(editor.findView((Container) evt.getSource()), point);
         DrawingView view = editor.findView((Container) evt.getSource());
         updateCursor(view, point);
         if (view == null || editor.getActiveView() != view) {
@@ -209,20 +208,7 @@ public class DefaultHandleTracker extends AbstractTool implements HandleTracker 
             // the current mouse location. Only then search for other
             // figures. This search sequence is consistent with the
             // search sequence of the SelectionTool.
-            Figure figure = null;
-            Point2D.Double p = view.viewToDrawing(point);
-            for (Figure f : view.getSelectedFigures()) {
-                if (f.contains(p)) {
-                    figure = f;
-                }
-            }
-            if (figure == null) {
-                figure = view.findFigure(point);
-                Drawing drawing = view.getDrawing();
-                while (figure != null && !figure.isSelectable()) {
-                    figure = drawing.findFigureBehind(p, figure);
-                }
-            }
+            Figure figure = SelectionHelper.searchForFigure(view, point, true);
             updateHoverHandles(view, figure);
         }
     }
