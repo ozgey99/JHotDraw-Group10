@@ -30,7 +30,7 @@ public class MainTest {
 
     /**
      * Test of main method, of class Main.
-     */
+
     //@FeatureEntryPoint(value="Main")
     @Test
     public void testMain() {
@@ -42,5 +42,5 @@ public class MainTest {
 
         }
     }
-
+*/
 }

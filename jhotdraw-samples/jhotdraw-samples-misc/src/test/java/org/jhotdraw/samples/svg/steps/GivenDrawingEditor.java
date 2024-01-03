@@ -2,32 +2,43 @@ package org.jhotdraw.samples.svg.steps;
 
 import com.tngtech.jgiven.Stage;
 
+import com.tngtech.jgiven.annotation.ExpectedScenarioState;
+import com.tngtech.jgiven.annotation.ProvidedScenarioState;
+import com.tngtech.jgiven.annotation.ScenarioState;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.figure.RectangleFigure;
 import org.jhotdraw.draw.tool.SelectionTool;
 
 public class GivenDrawingEditor extends Stage<GivenDrawingEditor> {
-
-    private DefaultDrawingEditor editor;
+    @ScenarioState
     Drawing drawing;
 
-    public GivenDrawingEditor aView(DrawingView view) {
-        editor = new DefaultDrawingEditor();
+    @ProvidedScenarioState
+    SelectionTool selectionTool;
+    @ProvidedScenarioState
+    DefaultDrawingView mockView;
+
+    public SelectionTool getSelectionTool() {
+        return selectionTool;
+    }
+
+    public DefaultDrawingView getMockView() {
+        return mockView;
+    }
+
+    public GivenDrawingEditor aViewWithARectangle(RectangleFigure rectangleFigure) {
+        DefaultDrawingEditor editor = new DefaultDrawingEditor();
+        selectionTool = new SelectionTool();
         drawing = new DefaultDrawing();
-
-        view.setDrawing(drawing);
-        editor.add(view);
-
-        return self();
-    }
-    public GivenDrawingEditor aRectangleFigure(RectangleFigure rectangleFigure){
+        mockView = new DefaultDrawingView();
         drawing.add(rectangleFigure);
-
+        mockView.setDrawing(drawing);
+        editor.add(mockView);
+        editor.setTool(selectionTool);
         return self();
     }
-    public GivenDrawingEditor aSelectionTool(SelectionTool selectionTool){
-        editor.setTool(selectionTool);
-
+    public GivenDrawingEditor aRectangle(RectangleFigure rectangleFigure){
+        drawing.add(rectangleFigure);
         return self();
     }
 }

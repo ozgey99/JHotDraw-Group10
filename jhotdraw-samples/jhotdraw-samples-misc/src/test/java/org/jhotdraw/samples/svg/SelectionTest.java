@@ -83,9 +83,15 @@ public class SelectionTest {
         selectionTool.mousePressed(mockMouseEvent(
                 (int)rectangleFigure.getStartPoint().getX(),
                 (int)rectangleFigure.getStartPoint().getY()));
+        selectionTool.mouseReleased(mockMouseEvent(
+                (int)rectangleFigure.getStartPoint().getX(),
+                (int)rectangleFigure.getStartPoint().getY()));
+        selectionTool.mousePressed(mockMouseEvent(
+                (int)rectangleFigure.getStartPoint().getX(),
+                (int)rectangleFigure.getStartPoint().getY()));
 
         Tool resultTracker = selectionTool.getHandleTracker();
-        assertTrue(resultTracker instanceof DragTracker);
+        assertTrue(resultTracker instanceof HandleTracker);
     }
 
     @Test
