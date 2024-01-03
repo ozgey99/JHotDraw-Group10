@@ -7,7 +7,7 @@
  */
 package org.jhotdraw.draw.tool;
 
-import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
+//import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.draw.figure.Figure;
 import java.awt.*;
 import java.awt.event.*;
@@ -95,7 +95,7 @@ public class DefaultHandleTracker extends AbstractTool implements HandleTracker 
         masterHandle = master;
         multicaster = new HandleMulticaster(handles);
     }
-    @FeatureEntryPoint(value="SelectionTool")
+    //@FeatureEntryPoint(value="SelectionTool")
     public DefaultHandleTracker() {
     }
 

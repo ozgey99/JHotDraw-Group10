@@ -7,7 +7,7 @@
  */
 package org.jhotdraw.draw.tool;
 
-import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
+//import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.draw.figure.Figure;
 import java.awt.*;
 import java.awt.event.*;
@@ -81,7 +81,7 @@ public class DefaultDragTracker extends AbstractTool implements DragTracker {
     public DefaultDragTracker(Figure figure) {
         anchorFigure = figure;
     }
-    @FeatureEntryPoint(value="SelectionTool")
+    //@FeatureEntryPoint(value="SelectionTool")
     public DefaultDragTracker() {
     }
 
