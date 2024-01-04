@@ -77,7 +77,7 @@ public class TextEditingTool extends AbstractTool implements ActionListener {
         }
     }
 
-    @FeatureEntryPoint("TextCreationTool-beginEdit")
+    @FeatureEntryPoint("TextEditingTool-beginEdit")
     protected void beginEdit(TextHolderFigure textHolder) {
         if (textField == null) {
             textField = new FloatingTextField();
@@ -89,10 +89,6 @@ public class TextEditingTool extends AbstractTool implements ActionListener {
         textField.createOverlay(getView(), textHolder);
         textField.requestFocus();
         typingTarget = textHolder;
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent evt) {
     }
 
     protected void endEdit() {
@@ -136,7 +132,6 @@ public class TextEditingTool extends AbstractTool implements ActionListener {
             typingTarget = null;
             textField.endOverlay();
         }
-        //         view().checkDamage();
     }
 
     @Override

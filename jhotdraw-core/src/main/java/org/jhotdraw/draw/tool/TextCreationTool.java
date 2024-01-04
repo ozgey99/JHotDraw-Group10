@@ -111,10 +111,6 @@ public class TextCreationTool extends CreationTool implements ActionListener {
         }
     }
 
-    @Override
-    public void mouseDragged(java.awt.event.MouseEvent e) {
-    }
-
     @FeatureEntryPoint("TextCreationTool-beginEdit")
     protected void beginEdit(TextHolderFigure textHolder) {
         if (textField == null) {
@@ -127,10 +123,6 @@ public class TextCreationTool extends CreationTool implements ActionListener {
         textField.createOverlay(getView(), textHolder);
         textField.requestFocus();
         typingTarget = textHolder;
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent evt) {
     }
 
     protected void endEdit() {
@@ -180,7 +172,6 @@ public class TextCreationTool extends CreationTool implements ActionListener {
             typingTarget = null;
             textField.endOverlay();
         }
-        //         view().checkDamage();
     }
 
     @Override
