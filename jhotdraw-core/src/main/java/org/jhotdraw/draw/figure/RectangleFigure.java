@@ -56,8 +56,7 @@ public class RectangleFigure extends AbstractAttributedFigure {
     // SHAPE AND BOUNDS
     @Override
     public Rectangle2D.Double getBounds() {
-        Rectangle2D.Double bounds = (Rectangle2D.Double) rectangle.clone();
-        return bounds;
+        return (Rectangle2D.Double) rectangle.clone();
     }
 
     @Override

@@ -321,7 +321,7 @@ public class AttributeKeys {
 
     static {
         HashSet<AttributeKey<?>> as = new HashSet<>();
-        as.addAll(Arrays.asList(new AttributeKey<?>[]{
+        as.addAll(Arrays.asList(
             FILL_COLOR,
             FILL_UNDER_STROKE,
             STROKE_COLOR,
@@ -349,7 +349,7 @@ public class AttributeKeys {
             START_DECORATION,
             DECORATOR_INSETS,
             ORIENTATION,
-            WINDING_RULE}));
+            WINDING_RULE));
         SUPPORTED_ATTRIBUTES = Collections.unmodifiableSet(as);
         HashMap<String, AttributeKey<?>> am = new HashMap<>();
         for (AttributeKey<?> a : as) {

@@ -205,9 +205,7 @@ public abstract class AbstractAttributedFigure extends AbstractFigure implements
                 Object prototypeValue = prototype.get(key);
                 @SuppressWarnings("unchecked")
                 Object attributeValue = get(key);
-                if (prototypeValue != attributeValue
-                        || (prototypeValue != null && attributeValue != null
-                        && !prototypeValue.equals(attributeValue))) {
+                if (prototypeValue != attributeValue) {
                     if (!isElementOpen) {
                         out.openElement("a");
                         isElementOpen = true;
@@ -232,16 +230,18 @@ public abstract class AbstractAttributedFigure extends AbstractFigure implements
                 String name = in.getTagName();
                 Object value = in.readObject();
                 AttributeKey<?> key = getAttributeKey(name);
-                if (key != null && key.isAssignable(value)) {
-                    if (forbiddenAttributes == null
-                            || !forbiddenAttributes.contains(key)) {
-                        set((AttributeKey<Object>) key, value);
-                    }
+                if (assignementAllowed(key, value)) {
+                    set((AttributeKey<Object>) key, value);
                 }
                 in.closeElement();
             }
             in.closeElement();
         }
+    }
+
+    protected boolean assignementAllowed(AttributeKey<?> key, Object value){
+        return (key != null && key.isAssignable(value)) && (forbiddenAttributes == null || !forbiddenAttributes.contains(key));
+
     }
 
     protected AttributeKey<?> getAttributeKey(String name) {
