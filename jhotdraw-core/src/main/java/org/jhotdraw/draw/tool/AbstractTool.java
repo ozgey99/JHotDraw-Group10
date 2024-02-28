@@ -48,14 +48,10 @@ public abstract class AbstractTool extends AbstractBean implements Tool {
      * being changed when a mouseEnter event is received.
      */
     protected boolean isWorking;
-    protected DrawingEditor editor;
+    protected transient DrawingEditor editor;
     protected Point anchor = new Point();
     protected EventListenerList listenerList = new EventListenerList();
     private DrawingEditorProxy editorProxy;
-    /*
-     private PropertyChangeListener editorHandler;
-     private PropertyChangeListener viewHandler;
-     */
     /**
      * The input map of the tool.
      */
@@ -68,7 +64,7 @@ public abstract class AbstractTool extends AbstractBean implements Tool {
     /**
      * Creates a new instance.
      */
-    public AbstractTool() {
+    protected AbstractTool() {
         editorProxy = new DrawingEditorProxy();
         setInputMap(createInputMap());
         setActionMap(createActionMap());
@@ -229,33 +225,37 @@ public abstract class AbstractTool extends AbstractBean implements Tool {
             Object obj = null;
             if (inputMap != null) {
                 // Lookup the input map of the tool
-                obj = inputMap.get(KeyStroke.getKeyStroke(evt.getKeyCode(), evt.getModifiers(), false));
+                obj = inputMap.get(KeyStroke.getKeyStroke(evt.getKeyCode(), evt.getModifiersEx(), false));
             }
             if (obj == null) {
                 // Fall back to the input map of the drawing editor
                 InputMap im = editor.getInputMap();
                 if (im != null) {
-                    obj = im.get(KeyStroke.getKeyStroke(evt.getKeyCode(), evt.getModifiers(), false));
+                    obj = im.get(KeyStroke.getKeyStroke(evt.getKeyCode(), evt.getModifiersEx(), false));
                 }
             }
-            ActionListener al = null;
-            if (obj instanceof ActionListener) {
-                al = (ActionListener) obj;
-            } else if (obj != null) {
-                // Lookup the action map of the tool
-                if (actionMap != null) {
-                    al = actionMap.get(obj);
-                }
-                if (al == null) {
-                    // Fall back to the action map of the drawing editor
-                    al = editor.getActionMap().get(obj);
-                }
+           performAction(obj, evt);
+        }
+    }
+
+    private void performAction(Object obj, KeyEvent evt) {
+        ActionListener al = null;
+        if (obj instanceof ActionListener) {
+            al = (ActionListener) obj;
+        } else if (obj != null) {
+            // Lookup the action map of the tool
+            if (actionMap != null) {
+                al = actionMap.get(obj);
             }
-            if (al != null) {
-                evt.consume();
-                al.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "tool", evt.getWhen(), evt.getModifiers()));
-                fireToolDone();
+            if (al == null) {
+                // Fall back to the action map of the drawing editor
+                al = editor.getActionMap().get(obj);
             }
+        }
+        if (al != null) {
+            evt.consume();
+            al.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "tool", evt.getWhen(), evt.getModifiersEx()));
+            fireToolDone();
         }
     }
 
@@ -285,9 +285,6 @@ public abstract class AbstractTool extends AbstractBean implements Tool {
 
     @Override
     public void mouseEntered(MouseEvent evt) {
-        /*if (! isWorking) {
-         editor.setActiveView(editor.findView((Container) evt.getSource()));
-         }*/
     }
 
     @Override

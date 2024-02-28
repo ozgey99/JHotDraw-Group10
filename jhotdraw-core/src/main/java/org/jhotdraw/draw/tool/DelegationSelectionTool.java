@@ -7,6 +7,7 @@
  */
 package org.jhotdraw.draw.tool;
 
+import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.draw.figure.Figure;
 import java.awt.*;
 import java.awt.event.*;
@@ -74,6 +75,7 @@ public class DelegationSelectionTool extends SelectionTool {
     /**
      * Creates a new instance.
      */
+    @FeatureEntryPoint(value="SelectionTool")
     public DelegationSelectionTool(Collection<Action> drawingActions, Collection<Action> selectionActions) {
         this.drawingActions = drawingActions;
         this.selectionActions = selectionActions;

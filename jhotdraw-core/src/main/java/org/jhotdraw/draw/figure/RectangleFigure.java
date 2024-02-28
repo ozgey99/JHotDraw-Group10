@@ -29,7 +29,6 @@ public class RectangleFigure extends AbstractAttributedFigure {
     public RectangleFigure() {
         this(0, 0, 0, 0);
     }
-
     public RectangleFigure(double x, double y, double width, double height) {
         rectangle = new Rectangle2D.Double(x, y, width, height);
     }
@@ -54,8 +53,7 @@ public class RectangleFigure extends AbstractAttributedFigure {
     // SHAPE AND BOUNDS
     @Override
     public Rectangle2D.Double getBounds() {
-        Rectangle2D.Double bounds = (Rectangle2D.Double) rectangle.clone();
-        return bounds;
+        return (Rectangle2D.Double) rectangle.clone();
     }
 
     @Override

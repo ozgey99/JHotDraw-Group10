@@ -117,7 +117,7 @@ public abstract class AbstractCompositeFigure
         }
     }
 
-    public AbstractCompositeFigure() {
+    protected AbstractCompositeFigure() {
         eventHandler = createEventHandler();
     }
 
@@ -297,7 +297,6 @@ public abstract class AbstractCompositeFigure
             f.transform(tx);
         }
         invalidate();
-        //invalidate();
     }
 
     @Override
@@ -315,7 +314,7 @@ public abstract class AbstractCompositeFigure
         if (!Double.isNaN(sx) && !Double.isNaN(sy)
                 && !Double.isInfinite(sx) && !Double.isInfinite(sy)
                 && (sx != 1d || sy != 1d)
-                && !(sx < 0.0001) && !(sy < 0.0001)) {
+                && (sx >= 0.0001) && (sy >= 0.0001)) {
             transform(tx);
             tx.setToIdentity();
             tx.scale(sx, sy);
@@ -331,7 +330,7 @@ public abstract class AbstractCompositeFigure
      * Z-order front to back over the children.
      */
     public java.util.List<Figure> getChildrenFrontToBack() {
-        return children.size() == 0 ? new LinkedList<>() : new ReversedList<>(getChildren());
+        return children.isEmpty() ? new LinkedList<>() : new ReversedList<>(getChildren());
     }
 
     @Override
@@ -414,7 +413,6 @@ public abstract class AbstractCompositeFigure
 
     public Figure findChild(Point2D.Double p) {
         if (getBounds().contains(p)) {
-            Figure found = null;
             for (Figure child : getChildrenFrontToBack()) {
                 if (child.isVisible() && child.contains(p)) {
                     return child;

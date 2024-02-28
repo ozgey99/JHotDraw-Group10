@@ -11,11 +11,21 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
 import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.AttributeKeys.WindingRule;
+
 import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.IS_STROKE_DASH_FACTOR;
+import static org.jhotdraw.draw.AttributeKeys.IS_STROKE_MITER_LIMIT_FACTOR;
 import static org.jhotdraw.draw.AttributeKeys.STROKE_CAP;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_COLOR;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_DASHES;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_DASH_PHASE;
 import static org.jhotdraw.draw.AttributeKeys.STROKE_JOIN;
 import static org.jhotdraw.draw.AttributeKeys.STROKE_MITER_LIMIT;
+import static org.jhotdraw.draw.AttributeKeys.STROKE_WIDTH;
 import static org.jhotdraw.draw.AttributeKeys.TRANSFORM;
+import static org.jhotdraw.draw.AttributeKeys.WINDING_RULE;
+
 import org.jhotdraw.draw.handle.BoundsOutlineHandle;
 import org.jhotdraw.draw.handle.Handle;
 import org.jhotdraw.draw.handle.ResizeHandleKit;
@@ -84,6 +94,28 @@ public class SVGRectFigure extends SVGAttributedFigure implements SVGFigure {
         roundrect = new RoundRectangle2D.Double(x, y, width, height, rx, ry);
         SVGAttributeKeys.setDefaults(this);
         setConnectable(false);
+    }
+
+    /*
+     * Copy constructor
+     */
+    public SVGRectFigure(SVGRectFigure template){
+         // Fill properties
+        // http://www.w3.org/TR/SVGMobile12/painting.html#FillProperties
+        this.set(FILL_COLOR, template.get(FILL_COLOR));
+        this.set(WINDING_RULE, WindingRule.NON_ZERO);
+        // Stroke properties
+        // http://www.w3.org/TR/SVGMobile12/painting.html#StrokeProperties
+        this.set(STROKE_COLOR, template.get(STROKE_COLOR));
+        this.set(STROKE_WIDTH,template.get(STROKE_WIDTH));
+        this.set(STROKE_CAP, template.get(STROKE_CAP));
+        this.set(STROKE_JOIN, template.get(STROKE_JOIN));
+        this.set(STROKE_MITER_LIMIT, template.get(STROKE_MITER_LIMIT));
+        this.set(IS_STROKE_MITER_LIMIT_FACTOR, template.get(IS_STROKE_MITER_LIMIT_FACTOR));
+        this.set(STROKE_DASHES, template.get(STROKE_DASHES));
+        this.set(STROKE_DASH_PHASE, template.get(STROKE_DASH_PHASE));
+        this.set(IS_STROKE_DASH_FACTOR, template.get(IS_STROKE_DASH_FACTOR));
+
     }
 
     // DRAWING
@@ -255,10 +287,10 @@ public class SVGRectFigure extends SVGAttributedFigure implements SVGFigure {
         if (cachedHitShape == null) {
             if (get(FILL_COLOR) != null || get(FILL_GRADIENT) != null) {
                 cachedHitShape = new GrowStroke(
-                        (float) SVGAttributeKeys.getStrokeTotalWidth(this, 1.0) / 2f,
-                        (float) SVGAttributeKeys.getStrokeTotalMiterLimit(this, 1.0)).createStrokedShape(getTransformedShape());
+                        (float) AttributeKeys.getStrokeTotalWidth(this, 1.0) / 2f,
+                        (float) AttributeKeys.getStrokeTotalMiterLimit(this, 1.0)).createStrokedShape(getTransformedShape());
             } else {
-                cachedHitShape = SVGAttributeKeys.getHitStroke(this, 1.0).createStrokedShape(getTransformedShape());
+                cachedHitShape = AttributeKeys.getHitStroke(this, 1.0).createStrokedShape(getTransformedShape());
             }
         }
         return cachedHitShape;
@@ -272,9 +304,8 @@ public class SVGRectFigure extends SVGAttributedFigure implements SVGFigure {
     @Override
     public void transform(AffineTransform tx) {
         invalidateTransformedShape();
-        if (get(TRANSFORM) != null
-                || //              (tx.getType() & (AffineTransform.TYPE_TRANSLATION | AffineTransform.TYPE_MASK_SCALE)) != tx.getType()) {
-                (tx.getType() & (AffineTransform.TYPE_TRANSLATION)) != tx.getType()) {
+        if (get(TRANSFORM) != null ||
+        (tx.getType() & (AffineTransform.TYPE_TRANSLATION)) != tx.getType()) {
             if (get(TRANSFORM) == null) {
                 set(TRANSFORM, (AffineTransform) tx.clone());
             } else {
@@ -325,7 +356,7 @@ public class SVGRectFigure extends SVGAttributedFigure implements SVGFigure {
     // EDITING
     @Override
     public Collection<Handle> createHandles(int detailLevel) {
-        LinkedList<Handle> handles = new LinkedList<Handle>();
+        LinkedList<Handle> handles = new LinkedList<>();
         switch (detailLevel % 2) {
             case -1: // Mouse hover handles
                 handles.add(new BoundsOutlineHandle(this, false, true));
