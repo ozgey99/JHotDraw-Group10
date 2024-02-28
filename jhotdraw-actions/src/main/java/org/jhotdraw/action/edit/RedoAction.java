@@ -56,6 +56,7 @@ public class RedoAction extends AbstractViewAction {
      */
 
     @FeatureEntryPoint(value = "Redo Action")
+    @Override
     public RedoAction(Application app, View view) {
         super(app, view);
         labels.configureAction(this, ID);
