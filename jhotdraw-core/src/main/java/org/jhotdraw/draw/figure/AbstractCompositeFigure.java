@@ -413,7 +413,6 @@ public abstract class AbstractCompositeFigure
 
     public Figure findChild(Point2D.Double p) {
         if (getBounds().contains(p)) {
-            Figure found = null;
             for (Figure child : getChildrenFrontToBack()) {
                 if (child.isVisible() && child.contains(p)) {
                     return child;
