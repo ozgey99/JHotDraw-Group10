@@ -17,6 +17,8 @@ import javax.swing.undo.*;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.util.*;
 
+import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
+
 /**
  * A {@link Tool} to create a new figure by drawing its bounds. The figure to be created is
  * specified by a prototype.
@@ -187,6 +189,7 @@ public class CreationTool extends AbstractTool {
     }
 
     @Override
+    @FeatureEntryPoint(value="presssed")
     public void mousePressed(MouseEvent evt) {
         super.mousePressed(evt);
         if (getView() == null) {
@@ -202,6 +205,7 @@ public class CreationTool extends AbstractTool {
     }
 
     @Override
+    @FeatureEntryPoint(value="dragged")
     public void mouseDragged(MouseEvent evt) {
         if (createdFigure != null) {
             Point2D.Double p = constrainPoint(new Point(evt.getX(), evt.getY()), createdFigure);
@@ -214,6 +218,7 @@ public class CreationTool extends AbstractTool {
     }
 
     @Override
+    @FeatureEntryPoint(value="released")
     public void mouseReleased(MouseEvent evt) {
         if (createdFigure != null) {
             Rectangle2D.Double bounds = createdFigure.getBounds();

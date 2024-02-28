@@ -7,7 +7,6 @@
  */
 package org.jhotdraw.draw.figure;
 
-import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import java.awt.*;
 import java.awt.geom.*;
 import org.jhotdraw.draw.AttributeKeys;
@@ -27,11 +26,9 @@ public class RectangleFigure extends AbstractAttributedFigure {
     /**
      * Creates a new instance.
      */
-    @FeatureEntryPoint(value="Rectangle without params")
     public RectangleFigure() {
         this(0, 0, 0, 0);
     }
-    @FeatureEntryPoint(value="Rectangle with params")
     public RectangleFigure(double x, double y, double width, double height) {
         rectangle = new Rectangle2D.Double(x, y, width, height);
     }
