@@ -62,7 +62,7 @@ public class CreationTool extends AbstractTool {
      * Attributes to be applied to the created ConnectionFigure. These attributes override the
      * default attributes of the DrawingEditor.
      */
-    protected Map<AttributeKey<?>, Object> prototypeAttributes;
+    protected transient Map<AttributeKey<?>, Object> prototypeAttributes;
     /**
      * A localized name for this tool. The presentationName is displayed by the UndoableEdit.
      */
@@ -102,7 +102,8 @@ public class CreationTool extends AbstractTool {
 
     public CreationTool(String prototypeClassName, Map<AttributeKey<?>, Object> attributes, String name) {
         try {
-            this.prototype = (Figure) Class.forName(prototypeClassName).newInstance();
+            Class<?> prototypeClass = Class.forName(prototypeClassName);
+            this.prototype = (Figure) prototypeClass.getConstructor().newInstance();
         } catch (Exception e) {
             InternalError error = new InternalError("Unable to create Figure from " + prototypeClassName);
             error.initCause(e);
@@ -125,7 +126,7 @@ public class CreationTool extends AbstractTool {
      * @param prototype The prototype used to create a new Figure.
      */
     public CreationTool(Figure prototype) {
-        this(prototype, null, null);
+        this(prototype, null);
     }
 
     /**
@@ -139,27 +140,8 @@ public class CreationTool extends AbstractTool {
      * applied the default attributes from the DrawingEditor.
      */
     public CreationTool(Figure prototype, Map<AttributeKey<?>, Object> attributes) {
-        this(prototype, attributes, null);
-    }
-
-    /**
-     * Creates a new instance with the specified prototype and attribute set.
-     *
-     * @param prototype The prototype used to create a new Figure.
-     * @param attributes The CreationTool applies these attributes to the prototype after having
-     * applied the default attributes from the DrawingEditor.
-     * @param name The name parameter is currently not used.
-     * @deprecated This constructor might go away, because the name parameter is not used.
-     */
-    @Deprecated
-    public CreationTool(Figure prototype, Map<AttributeKey<?>, Object> attributes, String name) {
         this.prototype = prototype;
         this.prototypeAttributes = attributes;
-        if (name == null) {
-            ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-            name = labels.getString("edit.createFigure.text");
-        }
-        this.presentationName = name;
     }
 
     public Figure getPrototype() {
@@ -228,8 +210,18 @@ public class CreationTool extends AbstractTool {
                     fireToolDone();
                 }
             } else {
-                if (Math.abs(anchor.x - evt.getX()) < minimalSizeTreshold.width
-                        && Math.abs(anchor.y - evt.getY()) < minimalSizeTreshold.height) {
+                this.updateFigure(anchor, evt.getX(), evt.getY(), bounds);
+            }
+        } else {
+            if (isToolDoneAfterCreation()) {
+                fireToolDone();
+            }
+        }
+    }
+
+    private void updateFigure(Point anchor, int x, int y, Rectangle2D.Double bounds) {
+        if (Math.abs(anchor.x - x) < minimalSizeTreshold.width
+                        && Math.abs(anchor.y - y) < minimalSizeTreshold.height) {
                     createdFigure.willChange();
                     createdFigure.setBounds(
                             constrainPoint(new Point(anchor.x, anchor.y), createdFigure),
@@ -265,16 +257,10 @@ public class CreationTool extends AbstractTool {
                     }
                 });
                 Rectangle r = new Rectangle(anchor.x, anchor.y, 0, 0);
-                r.add(evt.getX(), evt.getY());
+                r.add(x, y);
                 maybeFireBoundsInvalidated(r);
                 creationFinished(createdFigure);
                 createdFigure = null;
-            }
-        } else {
-            if (isToolDoneAfterCreation()) {
-                fireToolDone();
-            }
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -315,7 +301,6 @@ public class CreationTool extends AbstractTool {
      * created. This allows to create multiple figures consecutively.
      */
     public void setToolDoneAfterCreation(boolean newValue) {
-        boolean oldValue = isToolDoneAfterCreation;
         isToolDoneAfterCreation = newValue;
     }
 

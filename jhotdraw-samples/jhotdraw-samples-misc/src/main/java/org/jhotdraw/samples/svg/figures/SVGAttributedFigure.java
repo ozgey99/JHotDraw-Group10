@@ -34,7 +34,7 @@ public abstract class SVGAttributedFigure extends AbstractAttributedFigure {
     /**
      * Creates a new instance.
      */
-    public SVGAttributedFigure() {
+    protected SVGAttributedFigure() {
     }
 
     @Override
